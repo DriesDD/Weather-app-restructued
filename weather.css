@@ -1,0 +1,165 @@
+@media screen and (max-width: 800px) {
+  .cards {
+    grid-template-columns: auto;
+  }
+  .chart-container {
+    width:90vw;}
+  .day {
+    font-size: 20px;}
+  .icon {
+    width : 30px;}
+}
+@media screen and (min-width: 800px) {
+  .cards {
+    grid-template-columns: auto auto;
+  }
+  .chart-container {
+    width:45vw;}
+    .day {
+      font-size: 25px;
+    }
+    .icon{
+      width : 40px;}
+}
+@media screen and (min-width: 1200px) {
+  .cards {
+    grid-template-columns: auto auto auto;
+  }
+  .chart-container {
+    width:30vw;}
+    .day {
+      font-size: 30px;
+    }
+    .icon {
+      width : 60px;}
+
+}@media screen and (min-width: 2400px) {
+  .cards {
+    grid-template-columns: auto auto auto auto auto auto;
+  }
+  .chart-container {
+    width:15vw;}
+}
+
+.flexbox {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  height: 95vh
+}
+
+.body {
+margin: 0px;
+padding: 0px;
+font-family: 'Pangolin', cursive;
+}
+
+#background {
+  background-color: #67a;
+  background-image: url("defaultpic.png");
+  transition-property: background-image, background-color ; 
+  transition-duration: .5s;
+  background-position: center;
+  background-size: cover
+}
+
+.cards {
+    display: grid;
+    padding: 10px;
+    grid-gap: 20px;
+    margin: auto;
+    font-family: 'Pangolin', cursive;
+}
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  background-color: #001d;
+  color: #eee;
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 30px;
+  width: auto;
+  border-radius: 30px;
+}
+.card:hover {
+  transform: scale(1.05);
+}
+
+.searchcard {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    background-color: #001d;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    padding: 30px;
+    width: auto;
+    border-radius: 30px;
+    }
+
+.searchcard:hover {
+  transform: scale(1.05);
+}
+
+.searchcard.item {margin: auto}
+
+.stack{
+  display: grid;
+}
+.stack > * {
+  grid-row: 1;
+  grid-column: 1;
+}
+.stack:hover {
+  transform: scale(1.05);
+}
+
+.input {
+    background-color: white;
+    border-color: #dbdbdb;
+    border-radius: 30px;
+    height: 30px;
+    padding: 5px 10px;
+    font-size: 20px;
+    width: 210px;
+    font-family: 'Pangolin', cursive;
+    margin: 0px 10px 10px 10px;
+    color: #363636;
+}
+
+.placeholder {
+  font-size: 20px;
+  height: 30px;
+  padding: 10px 10px;
+  margin: 0px 10px 10px 10px;
+  color: #0003;
+  pointer-events: none;
+}
+
+.day 
+{position: absolute;
+  display: block;
+  top: 10px;
+  left: 20px;
+  right: 20px;
+}
+.note
+{position: absolute;
+font-size: 22px;
+display: block;}
+
+.icon:hover {
+  transform: scale(1.3);
+}
+
+/* chart container */
+.chart-container {
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
