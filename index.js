@@ -1,6 +1,16 @@
-import {drawBackground} from "/drawBackground.js"
-import {drawPointer} from "/drawPointer.js"
-import {getWeatherData} from '/getWeatherData.js'
+import {
+    drawBackground
+} from "/drawBackground.js"
+import {
+    drawPointer
+} from "/drawPointer.js"
+import {
+    getWeatherData
+} from '/getWeatherData.js'
+import {
+    getWeatherUrl
+} from '/getWeatherUrl.js'
+
 
 //wrap all in a global function
 
@@ -9,7 +19,7 @@ import {getWeatherData} from '/getWeatherData.js'
     let i, j, city, weatherdata, tmparray, iconarray, timearray, hoursarray, now, timeblock,
         graphmin, graphmax, graphdif, tmparray1, tmparray2, tmparray3, tmparray4, tmparray5, tempweatherdata, hoursarray1
 
-        tmparray1 = [],
+    tmparray1 = [],
         tmparray2 = [],
         tmparray3 = [],
         tmparray4 = [],
@@ -17,8 +27,8 @@ import {getWeatherData} from '/getWeatherData.js'
 
         document.getElementById('inputcity').value = localStorage.getItem("StoredCity")
 
-        city = document.getElementById('inputcity').value
-        setForecast()
+    city = document.getElementById('inputcity').value
+    setForecast()
 
     //new forecast on input
     document.getElementById('inputcity').oninput = () => {
@@ -27,7 +37,7 @@ import {getWeatherData} from '/getWeatherData.js'
     }
 
     async function setForecast() {
-        tempweatherdata = await getWeatherData(getWeatherUrl())
+        tempweatherdata = await getWeatherData(getWeatherUrl(city))
 
         //set current city and country so we can then check if they aren't identical to the ones we just looked up
         let activecity, activecountry;
@@ -41,14 +51,14 @@ import {getWeatherData} from '/getWeatherData.js'
 
         if ((tempweatherdata.city != undefined) && (tempweatherdata.city.name + tempweatherdata.city.country != activecity + activecountry)) {
             weatherdata = tempweatherdata
-            localStorage.setItem("StoredCity",document.getElementById('inputcity').value)
+            localStorage.setItem("StoredCity", document.getElementById('inputcity').value)
             document.getElementById("placeholder").innerText = weatherdata.city.name + ", " + weatherdata.city.country
             drawForecast()
         }
     }
 
     function drawForecast() {
-        
+
         drawBackground(city);
         clearData();
         createData();
@@ -163,76 +173,67 @@ import {getWeatherData} from '/getWeatherData.js'
             addTmpPointers()
 
             function addTmpPointers() {
-                drawPointer(eval('tmparray' + i),graphmin,graphdif, daymaxtime, String(daymax) + '°C', document.getElementById('chart' + i).parentElement);
-                drawPointer(eval('tmparray' + i),graphmin,graphdif, 8, String((eval('tmparray' + i))[8]) + '°C', document.getElementById('chart' + i).parentElement);
+                drawPointer(eval('tmparray' + i), graphmin, graphdif, daymaxtime, String(daymax) + '°C', document.getElementById('chart' + i).parentElement);
+                drawPointer(eval('tmparray' + i), graphmin, graphdif, 8, String((eval('tmparray' + i))[8]) + '°C', document.getElementById('chart' + i).parentElement);
             }
         }
 
-
-    }
-
-    function getWeatherUrl() {
-        if (document.getElementById("placeholder").innerText.length - 4 < document.getElementById('inputcity').value.length) {
-            document.getElementById("placeholder").innerText = ""
+        function clearData() { //clear icons
+            for (i = document.getElementsByClassName('note').length - 1; i >= 0; i--) {
+                document.getElementsByClassName('note')[i].remove()
+            }
+            //clear arrays of all the needed data points
+            tmparray = [];
+            tmparray1 = [];
+            tmparray2 = [];
+            tmparray3 = [];
+            tmparray4 = [];
+            tmparray5 = [];
+            iconarray = [];
+            timearray = [];
+            hoursarray = [];
+            graphmin = 30;
+            graphmax = 0;
+            let day;
         }
-        return 'https://api.openweathermap.org/data/2.5/forecast?q=' + city + '&mode=xmly&appid=48a8b4741cc8cb086ca2bbffc8c983cb'
-    }
 
-    function clearData() { //clear icons
-        for (i = document.getElementsByClassName('note').length - 1; i >= 0; i--) {
-            document.getElementsByClassName('note')[i].remove()
+        function createData() {
+            for (i = 0; i < weatherdata.list.length; i++) {
+                timearray.push(Date(weatherdata.list[i].dt_txt))
+                let day = new Date(weatherdata.list[i].dt_txt)
+                hoursarray.push(day.getHours() + "h")
+                tmparray.push(Math.round(weatherdata.list[i].main.temp - 273.15))
+                iconarray.push(weatherdata.list[i].weather[0].icon)
+                //add the standardized minima and maxima which are the same for each day chart
+                graphmin = Math.min(graphmin, tmparray[i])
+                graphmax = Math.max(graphmax, tmparray[i])
+            }
+            graphmin = Math.floor((graphmin - 2) / 5) * 5
+            graphmax = Math.ceil((graphmax + 7) / 5) * 5
+            graphdif = graphmax - graphmin
+            //add passed time on day 1
+            addPassedTime();
+            //now break up the array in five arrays of one day each
+            tmparray1 = tmparray.slice(0, 9);
+            tmparray2 = tmparray.slice(8, 17);
+            tmparray3 = tmparray.slice(16, 25);
+            tmparray4 = tmparray.slice(24, 33);
+            tmparray5 = tmparray.slice(32, 41);
+
+            hoursarray1 = hoursarray.slice(0, 9);
         }
-        //clear arrays of all the needed data points
-        tmparray = [];
-        tmparray1 = [];
-        tmparray2 = [];
-        tmparray3 = [];
-        tmparray4 = [];
-        tmparray5 = [];
-        iconarray = [];
-        timearray = [];
-        hoursarray = [];
-        graphmin = 30;
-        graphmax = 0;
-        let day;
-    }
 
-    function createData() {
-        for (i = 0; i < weatherdata.list.length; i++) {
-            timearray.push(Date(weatherdata.list[i].dt_txt))
-            let day = new Date(weatherdata.list[i].dt_txt)
-            hoursarray.push(day.getHours() + "h")
-            tmparray.push(Math.round(weatherdata.list[i].main.temp - 273.15))
-            iconarray.push(weatherdata.list[i].weather[0].icon)
-            //add the standardized minima and maxima which are the same for each day chart
-            graphmin = Math.min(graphmin, tmparray[i])
-            graphmax = Math.max(graphmax, tmparray[i])
-        }
-        graphmin = Math.floor((graphmin - 2) / 5) * 5
-        graphmax = Math.ceil((graphmax + 7) / 5) * 5
-        graphdif = graphmax - graphmin
-        addPassedTime()
-        //divide by 3 and correct for timezone
-        timeblock = Math.floor((now.getHours() + weatherdata.city.timezone / 3600) / 3) % 8;
-        //now break up the array in five arrays of one day each
-        tmparray1 = tmparray.slice(0, 9);
-        tmparray2 = tmparray.slice(8, 17);
-        tmparray3 = tmparray.slice(16, 25);
-        tmparray4 = tmparray.slice(24, 33);
-        tmparray5 = tmparray.slice(32, 41);
-
-        hoursarray1 = hoursarray.slice(0, 9);
-    }
-
-    function addPassedTime() {
-        //for the first day, add the missing hours that have already passed to the front
-        now = new Date(weatherdata.list[0].dt_txt)
-        //add null values to passed time on day 1
-        for (i = 1; i < timeblock; i++) {
-            timearray.unshift(null)
-            hoursarray.unshift(now.getHours() - i * 3 + "h")
-            tmparray.unshift(null)
-            iconarray.unshift(null)
+        function addPassedTime() {
+            //for the first day, add the missing hours that have already passed to the front correcting for timezone
+            now = new Date(weatherdata.list[0].dt_txt)
+            timeblock = Math.floor((now.getHours() + weatherdata.city.timezone / 3600) / 3) % 8;
+            //add null values to passed time on day 1
+            for (i = 1; i < timeblock; i++) {
+                timearray.unshift(null)
+                hoursarray.unshift(now.getHours() - i * 3 + "h")
+                tmparray.unshift(null)
+                iconarray.unshift(null)
+            }
         }
     }
 
