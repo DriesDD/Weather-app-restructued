@@ -163,8 +163,8 @@ import {getWeatherData} from '/getWeatherData.js'
             addTmpPointers()
 
             function addTmpPointers() {
-                drawPointer(tmparray1,tmparray2,tmparray3,tmparray4,tmparray5,graphmin,graphmax,graphdif,i, daymaxtime, String(daymax) + '°C', document.getElementById('chart' + i).parentElement);
-                drawPointer(tmparray1,tmparray2,tmparray3,tmparray4,tmparray5,graphmin,graphmax,graphdif,i, 8, String((eval('tmparray' + i))[8]) + '°C', document.getElementById('chart' + i).parentElement);
+                drawPointer(eval('tmparray' + i),graphmin,graphdif, daymaxtime, String(daymax) + '°C', document.getElementById('chart' + i).parentElement);
+                drawPointer(eval('tmparray' + i),graphmin,graphdif, 8, String((eval('tmparray' + i))[8]) + '°C', document.getElementById('chart' + i).parentElement);
             }
         }
 

@@ -1,12 +1,12 @@
 
-function drawPointer(tmparray1,tmparray2,tmparray3,tmparray4,tmparray5,graphmin,graphmax,graphdif, day, time, label, target) {
+function drawPointer(tmparray,graphmin,graphdif, time, label, target) {
     let html = document.createElement("div");
     html.classList.add('note');
     let img = document.createElement("img");
     let lbl = document.createTextNode(label);
-    const bottom = String(-20 + ((Number((eval('tmparray' + day))[time]) - graphmin) / graphdif) * 80) + '%';
+    const bottom = String(-20 + ((Number((tmparray)[time]) - graphmin) / graphdif) * 80) + '%';
     const left = String(-0 + (100 / 9) * time + 2) + '%';
-    const top = String(55 - ((Number((eval('tmparray' + day))[time]) - graphmin) / graphdif) * 80) + '%';
+    const top = String(55 - ((Number((tmparray)[time]) - graphmin) / graphdif) * 80) + '%';
     const right = String(100 - ((100 / 8) * time + 2)) + '%';
     switch (time) {
         case 0:
