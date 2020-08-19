@@ -11,5 +11,18 @@
   },
   "devDependencies": {
     "seve": "^0.10.0"
-  }
+  },
+  "description": "An exercise in beter JS code for an already existing weather App",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DriesDD/Weather-app-restructued.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DriesDD/Weather-app-restructued/issues"
+  },
+  "homepage": "https://github.com/DriesDD/Weather-app-restructued#readme"
 }
